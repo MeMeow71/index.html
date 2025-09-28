@@ -3,303 +3,168 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Онлайн Крестики-нолики</title>
+    <title>meow test</title>
     <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: Arial, sans-serif; }
-        body { display: flex; justify-content: center; align-items: center; min-height: 100vh; background: linear-gradient(135deg, #667eea, #764ba2); color: white; padding: 20px; }
-        .container { text-align: center; max-width: 500px; width: 100%; background: rgba(255,255,255,0.1); padding: 30px; border-radius: 15px; backdrop-filter: blur(10px); }
-        h1 { margin-bottom: 20px; font-size: 2.5rem; }
-        .status { font-size: 1.3rem; margin: 20px 0; font-weight: bold; }
-        .board { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 20px auto; max-width: 330px; }
-        .cell { aspect-ratio: 1; background: rgba(255,255,255,0.15); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; cursor: pointer; transition: all 0.3s; border: 2px solid transparent; }
-        .cell:hover { background: rgba(255,255,255,0.25); transform: translateY(-2px); }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+        }
+
+        .container {
+            text-align: center;
+            max-width: 400px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 25px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 {
+            margin-bottom: 20px;
+            font-size: 2.2rem;
+            color: #ffd700;
+        }
+
+        .status {
+            font-size: 1.2rem;
+            margin: 15px 0;
+            font-weight: bold;
+            min-height: 30px;
+        }
+
+        .players {
+            display: flex;
+            justify-content: space-around;
+            margin: 15px 0;
+            font-size: 1.1rem;
+        }
+
+        .player {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .symbol {
+            width: 25px;
+            height: 25px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .x .symbol { background: #ff6b6b; }
+        .o .symbol { background: #51cf66; }
+
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin: 20px auto;
+            max-width: 270px;
+        }
+
+        .cell {
+            aspect-ratio: 1;
+            background: rgba(255, 255, 255, 0.15);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+
+        .cell:hover {
+            background: rgba(255, 255, 255, 0.25);
+        }
+
         .cell.x { color: #ff6b6b; }
         .cell.o { color: #51cf66; }
-        .controls { margin: 25px 0; display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; }
-        button { padding: 12px 20px; background: #ffa502; color: white; border: none; border-radius: 8px; font-size: 1rem; font-weight: bold; cursor: pointer; transition: all 0.3s; }
-        button:hover { background: #ff7f00; transform: translateY(-2px); }
-        input { padding: 12px; border: none; border-radius: 8px; font-size: 1rem; width: 180px; }
-        .player-info { display: flex; justify-content: space-around; margin: 15px 0; font-size: 1.1rem; }
-        .winning-cell { background: rgba(255, 215, 0, 0.3) !important; border-color: gold !important; animation: pulse 1s infinite; }
-        @keyframes pulse { 
-            0% { transform: scale(1); }
-            50% { transform: scale(1.05); }
-            100% { transform: scale(1); }
+
+        .winning-cell {
+            background: rgba(255, 215, 0, 0.3) !important;
+            border-color: gold !important;
         }
-        .connection { margin: 10px 0; padding: 8px; border-radius: 5px; background: rgba(46, 213, 115, 0.3); }
+
+        .controls {
+            margin: 20px 0 15px 0;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        button {
+            padding: 12px;
+            background: #ffa502;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #ff7f00;
+        }
+
+        button:disabled {
+            background: #cccccc;
+            cursor: not-allowed;
+        }
+
+        .room-input {
+            display: flex;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            border-radius: 8px;
+            font-size: 1rem;
+            text-align: center;
+        }
+
+        .connection {
+            margin: 10px 0;
+            padding: 8px;
+            border-radius: 5px;
+            background: rgba(46, 213, 115, 0.3);
+            font-size: 0.9rem;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>🎮 Крестики-нолики ONLINE</h1>
+        <h1>meow test</h1>
         
-        <div class="status" id="status">Создайте комнату для игры</div>
+        <div class="status" id="status">Создайте комнату</div>
         
-        <div class="player-info">
-            <div>❌ <span id="playerX">Ожидание...</span></div>
-            <div>⭕️ <span id="playerO">Ожидание...</span></div>
-        </div>
-        
-        <div class="connection" id="connection">Подключение: Ожидание</div>
-        
-        <div class="board" id="board"></div>
-        
-        <div class="controls">
-            <input type="text" id="roomInput" placeholder="Введите ID комнаты">
-            <button onclick="createRoom()">🆕 Создать комнату</button>
-            <button onclick="joinRoom()">🔗 Присоединиться</button>
-            <button onclick="copyLink()">📋 Копировать ссылку</button>
-            <button onclick="newGame()">🔄 Новая игра</button>
-        </div>
-    </div>
-
-    <!-- 🔥 Firebase SDK - ТОЧНО ТАК КАК ПОКАЗЫВАЕТ FIREBASE -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-
-    <script>
-        // 🔧 🔧 🔧 ВСТАВЬТЕ СЮДА ВАШУ КОНФИГУРАЦИЮ ИЗ FIREBASE 🔧 🔧 🔧
-        const firebaseConfig = {
-            apiKey: "ВАШ_API_KEY",
-            authDomain: "ВАШ_AUTH_DOMAIN",
-            databaseURL: "ВАШ_DATABASE_URL",
-            projectId: "ВАШ_PROJECT_ID",
-            storageBucket: "ВАШ_STORAGE_BUCKET",
-            messagingSenderId: "ВАШ_SENDER_ID",
-            appId: "ВАШ_APP_ID"
-        };
-
-        // Инициализируем Firebase
-        const app = firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-
-        // Переменные игры
-        let currentRoom = null;
-        let playerId = 'player_' + Math.random().toString(36).substr(2, 9);
-        let playerSymbol = null;
-        let isMyTurn = false;
-
-        // Создаем игровое поле
-        function createBoard() {
-            const board = document.getElementById('board');
-            board.innerHTML = '';
-            for (let i = 0; i < 9; i++) {
-                const cell = document.createElement('div');
-                cell.className = 'cell';
-                cell.setAttribute('data-index', i);
-                cell.addEventListener('click', () => makeMove(i));
-                board.appendChild(cell);
-            }
-        }
-
-        // Создание комнаты
-        function createRoom() {
-            const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
-            document.getElementById('roomInput').value = roomId;
-            joinRoom(roomId, true);
-        }
-
-        // Присоединение к комнате
-        function joinRoom() {
-            const roomId = document.getElementById('roomInput').value.trim().toUpperCase();
-            if (!roomId) return alert('Введите ID комнаты');
-            joinRoom(roomId, false);
-        }
-
-        function joinRoom(roomId, isCreator) {
-            const roomRef = database.ref('rooms/' + roomId);
-            
-            roomRef.once('value').then(snapshot => {
-                if (!snapshot.exists() && !isCreator) {
-                    return alert('Комната ' + roomId + ' не найдена!');
-                }
-
-                currentRoom = roomId;
-                document.getElementById('connection').textContent = 'Подключение: Подключаемся...';
-
-                if (!snapshot.exists()) {
-                    // Создаем новую комнату
-                    roomRef.set({
-                        players: { 
-                            [playerId]: { symbol: 'X', name: 'Игрок 1', connected: true }
-                        },
-                        game: { 
-                            board: ['','','','','','','','',''], 
-                            currentPlayer: 'X', 
-                            winner: null,
-                            draw: false
-                        },
-                        createdAt: Date.now()
-                    });
-                    playerSymbol = 'X';
-                    isMyTurn = true;
-                    document.getElementById('status').textContent = '✅ Вы играете за X - Ваш ход!';
-                } else {
-                    // Присоединяемся к существующей комнате
-                    const room = snapshot.val();
-                    const players = room.players || {};
-                    
-                    if (Object.keys(players).length >= 2) {
-                        return alert('Комната заполнена! Максимум 2 игрока.');
-                    }
-
-                    playerSymbol = 'O';
-                    isMyTurn = false;
-                    roomRef.child('players').update({
-                        [playerId]: { symbol: 'O', name: 'Игрок 2', connected: true }
-                    });
-                    document.getElementById('status').textContent = '✅ Вы играете за O - Ожидайте ход противника';
-                }
-
-                // Слушаем изменения в комнате
-                setupRoomListeners(roomId);
-            });
-        }
-
-        // Настройка слушателей комнаты
-        function setupRoomListeners(roomId) {
-            const roomRef = database.ref('rooms/' + roomId);
-            
-            roomRef.on('value', snapshot => {
-                const room = snapshot.val();
-                if (room) {
-                    updateBoard(room.game.board);
-                    updatePlayers(room.players);
-                    updateGameStatus(room.game);
-                    document.getElementById('connection').textContent = 'Подключение: ✅ Подключено';
-                }
-            });
-        }
-
-        // Сделать ход
-        function makeMove(index) {
-            if (!currentRoom || !isMyTurn) return;
-            
-            const gameRef = database.ref('rooms/' + currentRoom + '/game');
-            gameRef.once('value').then(snapshot => {
-                const game = snapshot.val();
-                if (game && game.board[index] === '' && !game.winner) {
-                    const newBoard = [...game.board];
-                    newBoard[index] = playerSymbol;
-                    
-                    gameRef.update({
-                        board: newBoard,
-                        currentPlayer: playerSymbol === 'X' ? 'O' : 'X'
-                    });
-                }
-            });
-        }
-
-        // Обновление доски
-        function updateBoard(board) {
-            const cells = document.getElementById('board').children;
-            for (let i = 0; i < 9; i++) {
-                cells[i].textContent = board[i] || '';
-                cells[i].className = 'cell';
-                if (board[i]) cells[i].classList.add(board[i].toLowerCase());
-            }
-        }
-
-        // Обновление информации об игроках
-        function updatePlayers(players) {
-            const playerX = Object.values(players).find(p => p.symbol === 'X');
-            const playerO = Object.values(players).find(p => p.symbol === 'O');
-            
-            document.getElementById('playerX').textContent = playerX ? playerX.name : 'Ожидание...';
-            document.getElementById('playerO').textContent = playerO ? playerO.name : 'Ожидание...';
-        }
-
-        // Обновление статуса игры
-        function updateGameStatus(game) {
-            const winner = checkWinner(game.board);
-            isMyTurn = game.currentPlayer === playerSymbol && !winner;
-            
-            if (winner) {
-                document.getElementById('status').textContent = winner === playerSymbol ? 
-                    '🎉 Вы победили! Ура!' : '😞 Вы проиграли. Попробуйте еще!';
-                highlightWinner(game.board, winner);
-            } else if (game.board.every(cell => cell !== '')) {
-                document.getElementById('status').textContent = '🤝 Ничья! Хорошая игра!';
-            } else {
-                document.getElementById('status').textContent = isMyTurn ? 
-                    '✅ Ваш ход! (' + playerSymbol + ')' : 
-                    '⏳ Ожидаем ход противника...';
-            }
-        }
-
-        // Проверка победителя
-        function checkWinner(board) {
-            const winPatterns = [
-                [0,1,2], [3,4,5], [6,7,8], // горизонтальные
-                [0,3,6], [1,4,7], [2,5,8], // вертикальные
-                [0,4,8], [2,4,6] // диагональные
-            ];
-            
-            for (const pattern of winPatterns) {
-                const [a,b,c] = pattern;
-                if (board[a] && board[a] === board[b] && board[a] === board[c]) {
-                    return board[a];
-                }
-            }
-            return null;
-        }
-
-        // Подсветка выигрышной комбинации
-        function highlightWinner(board, winner) {
-            const winPatterns = [
-                [0,1,2], [3,4,5], [6,7,8],
-                [0,3,6], [1,4,7], [2,5,8],
-                [0,4,8], [2,4,6]
-            ];
-            
-            for (const pattern of winPatterns) {
-                const [a,b,c] = pattern;
-                if (board[a] === winner && board[b] === winner && board[c] === winner) {
-                    pattern.forEach(index => {
-                        document.querySelector(`.cell[data-index="${index}"]`).classList.add('winning-cell');
-                    });
-                    break;
-                }
-            }
-        }
-
-        // Новая игра
-        function newGame() {
-            if (currentRoom) {
-                database.ref('rooms/' + currentRoom + '/game').update({
-                    board: ['','','','','','','','',''],
-                    currentPlayer: 'X',
-                    winner: null,
-                    draw: false
-                });
-                document.getElementById('status').textContent = '🔄 Новая игра началась!';
-            } else {
-                alert('Сначала создайте или присоединитесь к комнате!');
-            }
-        }
-
-        // Копирование ссылки
-        function copyLink() {
-            if (currentRoom) {
-                const link = window.location.href.split('?')[0] + '?room=' + currentRoom;
-                navigator.clipboard.writeText(link).then(() => {
-                    alert('✅ Ссылка скопирована!\n\nОтправьте другу:\n' + link);
-                });
-            } else {
-                alert('❌ Сначала создайте комнату!');
-            }
-        }
-
-        // Автоприсоединение по ссылке
-        window.addEventListener('load', () => {
-            const urlParams = new URLSearchParams(window.location.search);
-            const roomId = urlParams.get('room');
-            if (roomId) {
-                document.getElementById('roomInput').value = roomId;
-                setTimeout(() => joinRoom(roomId, false), 1000);
-            }
-            createBoard();
-        });
-    </script>
-</body>
-</html>
+        <div class="players">
+            <div class="player x">
+                <div class="symbol">X</div>
+                <span id="playerX">...</span>
+            </div>
