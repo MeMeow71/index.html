@@ -193,7 +193,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <script>
-        // 🔧 КОНФИГУРАЦИЯ FIREBASE
         const firebaseConfig = {
             apiKey: "AIzaSyBGYBZUbXWA_4fqoO5aVLLPwWrztXyjcO8",
             authDomain: "rronoob-512ae.firebaseapp.com",
@@ -213,7 +212,6 @@
         let playerSymbol = null;
         let isMyTurn = false;
 
-        // Элементы DOM
         const statusElement = document.getElementById('status');
         const playerXElement = document.getElementById('playerX');
         const playerOElement = document.getElementById('playerO');
@@ -224,7 +222,6 @@
         const createBtn = document.getElementById('createBtn');
         const newGameBtn = document.getElementById('newGameBtn');
 
-        // Создание доски
         function createBoard() {
             boardElement.innerHTML = '';
             for (let i = 0; i < 9; i++) {
@@ -236,14 +233,12 @@
             }
         }
 
-        // Создание комнаты
         function createRoom() {
             const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
             roomInput.value = roomId;
             joinRoomHandler(roomId, true);
         }
 
-        // Присоединение к комнате
         function joinRoom() {
             const roomId = roomInput.value.trim().toUpperCase();
             if (!roomId) {
@@ -266,7 +261,6 @@
                 connectionElement.textContent = 'Подключение...';
 
                 if (!snapshot.exists()) {
-                    // Создаем новую комнату
                     roomRef.set({
                         players: { 
                             [playerId]: { symbol: 'X', name: 'Игрок 1' }
@@ -282,7 +276,6 @@
                     isMyTurn = true;
                     statusElement.textContent = 'Ваш ход (X)';
                 } else {
-                    // Присоединяемся к комнате
                     const room = snapshot.val();
                     const players = room.players || {};
                     
@@ -302,8 +295,6 @@
                 setupRoomListeners(roomId);
             });
         }
-
-        // Настройка слушателей
         function setupRoomListeners(roomId) {
             const roomRef = database.ref('rooms/' + roomId);
             
@@ -318,7 +309,6 @@
             });
         }
 
-        // Ход
         function makeMove(index) {
             if (!currentRoom || !isMyTurn) return;
             
@@ -336,8 +326,6 @@
                 }
             });
         }
-
-        // Обновление доски
         function updateBoard(board) {
             const cells = document.getElementById('board').children;
             for (let i = 0; i < 9; i++) {
@@ -347,7 +335,6 @@
             }
         }
 
-        // Обновление игроков
         function updatePlayers(players) {
             const playerX = Object.values(players).find(p => p.symbol === 'X');
             const playerO = Object.values(players).find(p => p.symbol === 'O');
@@ -356,7 +343,6 @@
             playerOElement.textContent = playerO ? playerO.name : '...';
         }
 
-        // Обновление статуса
         function updateGameStatus(game) {
             const winner = checkWinner(game.board);
             isMyTurn = game.currentPlayer === playerSymbol && !winner;
@@ -373,7 +359,6 @@
             }
         }
 
-        // Проверка победителя
         function checkWinner(board) {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
             for (let win of wins) {
@@ -383,8 +368,6 @@
             }
             return null;
         }
-
-        // Подсветка победителя
         function highlightWinner(board, winner) {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
             for (let win of wins) {
@@ -397,7 +380,6 @@
             }
         }
 
-        // Новая игра
         function newGame() {
             if (currentRoom) {
                 database.ref('rooms/' + currentRoom + '/game').update({
@@ -410,12 +392,10 @@
             }
         }
 
-        // Обработчики кнопок
         joinBtn.addEventListener('click', joinRoom);
         createBtn.addEventListener('click', createRoom);
         newGameBtn.addEventListener('click', newGame);
 
-        // Автоприсоединение по ссылке
         window.addEventListener('load', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const roomId = urlParams.get('room');
