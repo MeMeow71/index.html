@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VK Racing - Онлайн с друзьями</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #4a76a8, #2a5885);
+            color: white;
+            font-family: Arial, sans-serif;
+            text-align: center;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        h1 {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .share-link {
+            background: rgba(255,255,255,0.2);
+            padding: 10px;
+            border-radius: 5px;
+            margin: 20px 0;
+            word-break: break-all;
+        }
+        .btn {
+            background: #5a86b8;
+            color: white;
+            border: none;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+        #gameCanvas {
+            background: #1e3c5a;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏎️ VK RACING</h1>
+        <p>Играйте с друзьями! Отправьте им эту ссылку:</p>
+        
+        <div class="share-link" id="shareLink">
+            Загрузка...
+        </div>
+
+        <button class="btn" onclick="startGame()">ИГРАТЬ ОДНОМУ</button>
+        <button class="btn" onclick="shareWithFriends()">ПОДЕЛИТЬСЯ С ДРУЗЬЯМИ</button>
+        
+        <canvas id="gameCanvas" width="800" height="400" style="display:none;"></canvas>
+    </div>
+
+    <script>
+        // Показываем ссылку для друзей
+        document.getElementById('shareLink').textContent = window.location.href;
+        
+        function shareWithFriends() {
+            const link = window.location.href;
+            if (navigator.share) {
+                navigator.share({
+                    title: 'VK Racing - Гоночная игра',
+                    text: 'Поиграем в гонки?',
+                    url: link
+                });
+            } else {
+                navigator.clipboard.writeText(link);
+                alert('Ссылка скопирована! Отправьте друзьям: ' + link);
+            }
+        }
+        
+        function startGame() {
+            document.querySelector('.btn').style.display = 'none';
+            const canvas = document.getElementById('gameCanvas');
+            canvas.style.display = 'block';
+            
+            const ctx = canvas.getContext('2d');
+            
+            // Простая гоночная игра
+            let carPosition = 200;
+            
+            function drawGame() {
+                // Очистка
+                ctx.fillStyle = '#1e3c5a';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Дорога
+                ctx.fillStyle = '#34495e';
+                ctx.fillRect(100, 0, 600, canvas.height);
+                
+                // Разметка
+                ctx.fillStyle = 'white';
+                for (let i = 0; i < canvas.height; i += 40) {
+                    ctx.fillRect(395, i, 10, 20);
+                }
+                
+                // Машина игрока
+                ctx.fillStyle = '#e74c3c';
+                ctx.fillRect(150, carPosition, 60, 30);
+                
+                // Боты
+                ctx.fillStyle = '#3498db';
+                ctx.fillRect(550, 100, 60, 30);
+                ctx.fillRect(550, 250, 60, 30);
+            }
+            
+            // Управление
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowUp' && carPosition > 0) carPosition -= 10;
+                if (e.key === 'ArrowDown' && carPosition < 370) carPosition += 10;
+                drawGame();
+            });
+            
+            drawGame();
+        }
+        
+        console.log('VK Racing Online loaded! Share with friends:', window.location.href);
+    </script>
+</body>
+</html>
