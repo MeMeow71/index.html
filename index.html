@@ -168,7 +168,6 @@
                 <div class="symbol">X</div>
                 <span id="playerX">...</span>
             </div>
-
             <div class="player o">
                 <div class="symbol">O</div>
                 <span id="playerO">...</span>
@@ -182,10 +181,10 @@
         <div class="controls">
             <div class="room-input">
                 <input type="text" id="roomInput" placeholder="ID комнаты">
-                <button onclick="joinRoom()">Присоединиться</button>
+                <button id="joinBtn">Присоединиться</button>
             </div>
-            <button onclick="createRoom()">Создать комнату</button>
-            <button onclick="newGame()">Новая игра</button>
+            <button id="createBtn">Создать комнату</button>
+            <button id="newGameBtn">Новая игра</button>
         </div>
     </div>
 
@@ -193,18 +192,15 @@
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
 
     <script>
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-  import { getAnalytics } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-analytics.js";
-        // 🔧 ЗАМЕНИТЕ НА ВАШУ КОНФИГУРАЦИЮ FIREBASE
+        // 🔧 КОНФИГУРАЦИЯ FIREBASE
         const firebaseConfig = {
-            apiKey:  "AIzaSyBGYBZUbXWA_4fqoO5aVLLPwWrztXyjcO8",
+            apiKey: "AIzaSyBGYBZUbXWA_4fqoO5aVLLPwWrztXyjcO8",
             authDomain: "rronoob-512ae.firebaseapp.com",
-            databaseURL:  "https://rronoob-512ae-default-rtdb.europe-west1.firebasedatabase.app",
+            databaseURL: "https://rronoob-512ae-default-rtdb.europe-west1.firebasedatabase.app",
             projectId: "rronoob-512ae",
             storageBucket: "rronoob-512ae.firebasestorage.app",
             messagingSenderId: "582568630469",
-            appId: "1:582568630469:web:e9e8307e1d752bc7d7b8ac",
-            measurementId: "G-C7VWSFWYBP"
+            appId: "1:582568630469:web:e9e8307e1d752bc7d7b8ac"
         };
 
         // Инициализация Firebase
@@ -223,6 +219,9 @@
         const connectionElement = document.getElementById('connection');
         const boardElement = document.getElementById('board');
         const roomInput = document.getElementById('roomInput');
+        const joinBtn = document.getElementById('joinBtn');
+        const createBtn = document.getElementById('createBtn');
+        const newGameBtn = document.getElementById('newGameBtn');
 
         // Создание доски
         function createBoard() {
@@ -240,7 +239,7 @@
         function createRoom() {
             const roomId = Math.random().toString(36).substr(2, 6).toUpperCase();
             roomInput.value = roomId;
-            joinRoom(roomId, true);
+            joinRoomHandler(roomId, true);
         }
 
         // Присоединение к комнате
@@ -250,10 +249,10 @@
                 alert('Введите ID комнаты');
                 return;
             }
-            joinRoom(roomId, false);
+            joinRoomHandler(roomId, false);
         }
 
-        function joinRoom(roomId, isCreator) {
+        function joinRoomHandler(roomId, isCreator) {
             const roomRef = database.ref('rooms/' + roomId);
             
             roomRef.once('value').then(snapshot => {
@@ -272,7 +271,7 @@
                             [playerId]: { symbol: 'X', name: 'Игрок 1' }
                         },
                         game: { 
-                            board: ['','','','','','','','',''], 
+                            board: ['','','','','','','','',''],
                             currentPlayer: 'X', 
                             winner: null
                         },
@@ -282,7 +281,8 @@
                     isMyTurn = true;
                     statusElement.textContent = 'Ваш ход (X)';
                 } else {
-                       const room = snapshot.val();
+                    // Присоединяемся к комнате
+                    const room = snapshot.val();
                     const players = room.players || {};
                     
                     if (Object.keys(players).length >= 2) {
@@ -409,19 +409,21 @@
             }
         }
 
+        // Обработчики кнопок
+        joinBtn.addEventListener('click', joinRoom);
+        createBtn.addEventListener('click', createRoom);
+        newGameBtn.addEventListener('click', newGame);
+
         // Автоприсоединение по ссылке
         window.addEventListener('load', () => {
             const urlParams = new URLSearchParams(window.location.search);
             const roomId = urlParams.get('room');
             if (roomId) {
                 roomInput.value = roomId;
-                setTimeout(() => joinRoom(roomId, false), 1000);
+                setTimeout(() => joinRoomHandler(roomId, false), 1000);
             }
             createBoard();
         });
-
-          const app = initializeApp(firebaseConfig);
-  const analytics = getAnalytics(app);
     </script>
 </body>
 </html>
