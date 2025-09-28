@@ -24,7 +24,7 @@
 
         .container {
             text-align: center;
-            max-width: 650px;
+            max-width: 500px;
             width: 100%;
             background: rgba(255, 255, 255, 0.1);
             padding: 25px;
@@ -117,8 +117,8 @@
             background: #ffa502;
             color: white;
             border: none;
+            padding: 1rem;
             border-radius: 8px;
-            padding-right: 1rem;
             font-size: 1rem;
             font-weight: bold;
             cursor: pointer;
@@ -203,7 +203,6 @@
             appId: "1:582568630469:web:e9e8307e1d752bc7d7b8ac"
         };
 
-        // Инициализация Firebase
         firebase.initializeApp(firebaseConfig);
         const database = firebase.database();
 
@@ -261,6 +260,7 @@
                 connectionElement.textContent = 'Подключение...';
 
                 if (!snapshot.exists()) {
+
                     roomRef.set({
                         players: { 
                             [playerId]: { symbol: 'X', name: 'Игрок 1' }
@@ -276,6 +276,7 @@
                     isMyTurn = true;
                     statusElement.textContent = 'Ваш ход (X)';
                 } else {
+  
                     const room = snapshot.val();
                     const players = room.players || {};
                     
@@ -295,6 +296,7 @@
                 setupRoomListeners(roomId);
             });
         }
+
         function setupRoomListeners(roomId) {
             const roomRef = database.ref('rooms/' + roomId);
             
@@ -308,6 +310,7 @@
                 }
             });
         }
+
 
         function makeMove(index) {
             if (!currentRoom || !isMyTurn) return;
@@ -326,6 +329,8 @@
                 }
             });
         }
+
+
         function updateBoard(board) {
             const cells = document.getElementById('board').children;
             for (let i = 0; i < 9; i++) {
@@ -368,6 +373,7 @@
             }
             return null;
         }
+
         function highlightWinner(board, winner) {
             const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
             for (let win of wins) {
